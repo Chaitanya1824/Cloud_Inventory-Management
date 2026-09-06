@@ -1,0 +1,41 @@
+body {
+    background-color: #f4f6f9;
+}
+
+.stat-card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.15s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card .stat-icon {
+    font-size: 1.75rem;
+    opacity: 0.85;
+}
+
+.card {
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.table thead th {
+    background-color: #eef1f6;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #495057;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.section-title {
+    font-weight: 600;
+    color: #2c3345;
+}
