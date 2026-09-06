@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(title=${isEdit} ? 'Edit Product' : 'Add Product')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: nav}"></div>
+
+<div class="container-fluid px-4">
+    <h4 class="section-title mb-3">
+        <i class="bi bi-box-seam me-2"></i>
+        <span th:text="${isEdit} ? 'Edit Product' : 'Add New Product'"></span>
+    </h4>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div class="card p-4" style="max-width: 720px;">
+        <form th:action="@{/products/save}" th:object="${product}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="mb-3">
+                <label class="form-label">Product Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" th:field="*{name}"
+                       th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"/>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">SKU (Stock Keeping Unit) <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" th:field="*{sku}"
+                           th:classappend="${#fields.hasErrors('sku')} ? 'is-invalid'"/>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('sku')}" th:errors="*{sku}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" th:field="*{category}">
+                        <option value="">-- Uncategorized --</option>
+                        <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="2" th:field="*{description}"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Quantity <span class="text-danger">*</span></label>
+                    <input type="number" min="0" class="form-control" th:field="*{quantity}"
+                           th:classappend="${#fields.hasErrors('quantity')} ? 'is-invalid'"
+                           th:readonly="${isEdit}"/>
+                    <div class="form-text" th:if="${isEdit}">Use "Adjust Stock" on the product list to change quantity.</div>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Low Stock Threshold <span class="text-danger">*</span></label>
+                    <input type="number" min="0" class="form-control" th:field="*{lowStockThreshold}"
+                           th:classappend="${#fields.hasErrors('lowStockThreshold')} ? 'is-invalid'"/>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lowStockThreshold')}" th:errors="*{lowStockThreshold}"></div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Unit Price (&#8377;) <span class="text-danger">*</span></label>
+                    <input type="number" min="0" step="0.01" class="form-control" th:field="*{unitPrice}"
+                           th:classappend="${#fields.hasErrors('unitPrice')} ? 'is-invalid'"/>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('unitPrice')}" th:errors="*{unitPrice}"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Supplier</label>
+                <input type="text" class="form-control" th:field="*{supplier}"/>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Save Product</button>
+                <a href="/products" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

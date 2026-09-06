@@ -15,9 +15,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByCategoryId(Long categoryId);
 
+    long countByCategoryId(Long categoryId);
+
     List<Product> findByNameContainingIgnoreCaseOrSkuContainingIgnoreCase(String name, String sku);
 
-    // Products where current quantity has dropped to or below its own threshold
     @Query("SELECT p FROM Product p WHERE p.quantity <= p.lowStockThreshold AND p.quantity > 0")
     List<Product> findLowStockProducts();
 

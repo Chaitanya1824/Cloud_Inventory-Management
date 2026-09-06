@@ -9,6 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/categories")
 public class CategoryController {
@@ -21,7 +25,13 @@ public class CategoryController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("categories", categoryService.getAllCategories());
+        List<Category> categories = categoryService.getAllCategories();
+        Map<Long, Long> productCounts = new HashMap<>();
+        for (Category c : categories) {
+            productCounts.put(c.getId(), categoryService.getProductCount(c.getId()));
+        }
+        model.addAttribute("categories", categories);
+        model.addAttribute("productCounts", productCounts);
         return "categories/list";
     }
 

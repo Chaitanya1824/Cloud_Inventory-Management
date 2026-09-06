@@ -2,6 +2,7 @@ package com.inventory.service;
 
 import com.inventory.model.Category;
 import com.inventory.repository.CategoryRepository;
+import com.inventory.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
     }
 
     public List<Category> getAllCategories() {
@@ -30,15 +33,20 @@ public class CategoryService {
 
     public void deleteCategory(Long id) {
         Category category = getCategoryById(id);
-        if (category.getProductCount() > 0) {
+        long productCount = productRepository.countByCategoryId(id);
+        if (productCount > 0) {
             throw new IllegalStateException(
                     "Cannot delete category '" + category.getName() + "' - it still has "
-                            + category.getProductCount() + " product(s) assigned to it.");
+                            + productCount + " product(s) assigned to it.");
         }
         categoryRepository.deleteById(id);
     }
 
     public boolean nameExists(String name) {
         return categoryRepository.existsByNameIgnoreCase(name);
+    }
+
+    public long getProductCount(Long categoryId) {
+        return productRepository.countByCategoryId(categoryId);
     }
 }
